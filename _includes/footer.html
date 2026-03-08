@@ -1,0 +1,77 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+      <div class="footer-logo-zh">{{ site.name }}</div>
+      <div class="footer-logo-en">{{ site.description }}</div>
+    </div>
+
+    <ul class="footer-links" aria-label="頁腳連結">
+      {% if site.github_username %}
+      <li><a href="https://github.com/{{ site.github_username }}" target="_blank" rel="noopener">GitHub</a></li>
+      {% endif %}
+      <li><a href="{{ site.baseurl }}/feed.xml" aria-label="RSS 訂閱">RSS</a></li>
+      <li><a href="{{ site.baseurl }}/about">About</a></li>
+    </ul>
+
+    <span class="footer-copy">
+      &copy; {{ site.time | date: "%Y" }} {{ site.name }}
+    </span>
+
+  </div>
+</footer>
+
+<style>
+.site-footer {
+  background: var(--ink);
+  padding: 2rem 2.5rem;
+  transition: background 0.35s;
+}
+.footer-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-logo-zh {
+  font-family: 'Zen Old Mincho', 'Noto Serif TC', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.36em;
+  color: var(--bg);
+  transition: color 0.35s;
+}
+.footer-logo-en {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-style: italic;
+  font-size: 0.65rem;
+  color: rgb(120 120 128);
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+.footer-links a {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: rgb(120 120 128);
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: var(--bg); }
+.footer-copy {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.62rem;
+  color: rgb(100 100 108);
+}
+@media (max-width: 640px) {
+  .site-footer { padding: 2rem 1.5rem; }
+  .footer-inner { flex-direction: column; gap: 1.2rem; }
+  .footer-links { gap: 1rem; }
+}
+</style>

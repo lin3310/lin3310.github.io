@@ -1,0 +1,32 @@
+// ═══════════════════════════════════════════
+// Icons — 圓形車站標示風格 SVG
+// 圖形定義在 _includes/svg-defs.html
+// ═══════════════════════════════════════════
+
+// 通用容器
+.si {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--accent) var(--accent-show), var(--ink-faint));
+  transition: color 0.4s;
+  flex-shrink: 0;
+
+  svg {
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+// 側欄分類圖示（小）
+.sidebar-list .si {
+  opacity: 0.7;
+}
+
+// Footer 裝飾圖示（中）
+.footer-icon.si {
+  opacity: 0.4;
+}

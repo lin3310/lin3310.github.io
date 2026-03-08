@@ -1,0 +1,63 @@
+// ═══════════════════════════════════════════
+// A11y — 無障礙增強模式
+// 由 body.a11y class 觸發
+// ═══════════════════════════════════════════
+
+body.a11y {
+  // 加深輔助文字，對比比提升至 ≥ 4.5:1
+  --ink-faint: rgb(88 88 96);
+
+  // 加粗規則線
+  --rule:       rgba(26, 26, 26, 0.22);
+  --rule-thick: rgba(26, 26, 26, 0.40);
+
+  // 放寬行距
+  --lh-body: 2.3;
+  --lh-head: 1.7;
+
+  // focus ring 加強
+  *:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent) var(--accent-show), var(--ink));
+    outline-offset: 3px;
+  }
+
+  // 連結加下底線
+  .article-body a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  // 加大觸控目標
+  .post-tag {
+    padding: 3px 8px 4px;
+  }
+
+  .site-nav a {
+    padding: 0.4rem 1.2rem;
+  }
+
+  // 加粗文章 meta
+  .meta-field-value {
+    font-weight: 700;
+  }
+}
+
+// ── Skip link（鍵盤使用者跳過導航）──
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 3px 3px;
+  transition: top 0.2s;
+
+  &:focus {
+    top: 0;
+  }
+}

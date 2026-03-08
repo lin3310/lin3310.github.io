@@ -1,0 +1,146 @@
+// ═══════════════════════════════════════════
+// Header — 票根 Logo + 導航
+// ═══════════════════════════════════════════
+
+.site-header {
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule-thick);
+  padding: 0 2.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  transition: background 0.35s;
+}
+
+.header-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+// ── 票根 Logo ──
+.logo-ticket {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--rule-thick);
+  border-radius: 2px;
+  position: relative;
+  transition: border-color 0.35s;
+
+  // 打洞
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -5px;
+    width: 9px;
+    height: 9px;
+    background: var(--bg);
+    border: 1px solid var(--rule-thick);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    transition: background 0.35s;
+  }
+}
+
+.logo-num {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  padding: 4px 8px;
+  border-right: 1px dashed var(--rule-thick);
+  display: flex;
+  align-items: center;
+  background: var(--bg-2);
+  transition: background 0.35s;
+  user-select: none;
+}
+
+.logo-name {
+  padding: 4px 14px 4px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.logo-name-zh {
+  font-family: 'Zen Old Mincho', 'Noto Serif TC', serif;
+  font-weight: var(--fw-heading);
+  font-size: 1rem;
+  letter-spacing: 0.22em;
+  color: var(--ink);
+  line-height: 1;
+  transition: font-weight 0.2s;
+}
+
+.logo-name-en {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-style: italic;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  line-height: 1;
+}
+
+// ── 主導航 ──
+.site-nav {
+  display: flex;
+  align-items: center;
+}
+
+.site-nav a {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: var(--fw-ui);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-mid);
+  padding: 0.3rem 1.1rem;
+  border-left: 1px solid var(--rule);
+  transition: color 0.15s, background 0.15s;
+
+  &:first-child { border-left: none; }
+
+  &:hover,
+  &.active {
+    color: var(--ink);
+    background: var(--bg-2);
+  }
+
+  &[aria-current="page"] {
+    color: var(--ink);
+  }
+}
+
+// ── 右側日期戳 ──
+.header-stamp-date {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  border: 1px solid var(--rule-thick);
+  padding: 2px 8px;
+  border-radius: 1px;
+  transform: rotate(-1deg);
+  white-space: nowrap;
+  user-select: none;
+}
+
+// ── RWD ──
+@media (max-width: 640px) {
+  .site-header { padding: 0 1.2rem; }
+
+  .header-stamp-date { display: none; }
+
+  .site-nav a {
+    font-size: 0.62rem;
+    padding: 0.3rem 0.7rem;
+    letter-spacing: 0.12em;
+  }
+}

@@ -1,0 +1,106 @@
+// ═══════════════════════════════════════════
+// TOC — 文章小目錄
+// ═══════════════════════════════════════════
+
+.article-toc {
+  margin: 2rem 0 2.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.toc-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.35s;
+}
+
+.toc-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--rule-thick);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.toc-label {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--ink-faint);
+  user-select: none;
+}
+
+.toc-body {
+  padding: 0.8rem 1rem;
+}
+
+.toc-list {
+  list-style: none;
+
+  > li {
+    padding: 0.22rem 0;
+  }
+
+  // 主條目
+  > li > a {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.84rem;
+    color: var(--ink-mid);
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding-left: 0.2rem;
+    border-left: 2px solid transparent;
+    transition:
+      border-color 0.25s,
+      color 0.15s,
+      padding-left 0.15s;
+
+    &:hover {
+      color: var(--ink);
+      border-left-color: color-mix(in srgb, var(--accent) var(--accent-show), var(--rule-thick));
+      padding-left: 0.5rem;
+    }
+  }
+}
+
+// 序號
+.toc-num {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  min-width: 1.4rem;
+  flex-shrink: 0;
+}
+
+// 子條目
+.toc-sub {
+  list-style: none;
+  padding-left: 1.6rem;
+  margin-top: 0.1rem;
+
+  li { padding: 0.15rem 0; }
+
+  a {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    padding-left: 0.9rem;
+    position: relative;
+    transition: color 0.15s;
+
+    &::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--rule-thick);
+    }
+
+    &:hover { color: var(--ink-mid); }
+  }
+}

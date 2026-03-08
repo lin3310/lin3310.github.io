@@ -1,0 +1,311 @@
+// ═══════════════════════════════════════════
+// Article — 票根頭部 + 正文 + Drop Cap
+// ═══════════════════════════════════════════
+
+.article-page {
+  max-width: var(--article-w);
+  margin: 0 auto;
+  padding: 4rem 2.5rem 6rem;
+}
+
+// ── 票根頭部 ──
+.article-ticket {
+  border: 1px solid var(--rule-thick);
+  border-radius: 2px;
+  margin-bottom: 3rem;
+  overflow: hidden;
+}
+
+.ticket-top {
+  padding: 1.2rem 1.4rem 1rem;
+  background: var(--bg-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: background 0.35s;
+}
+
+.ticket-cat {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.28em;
+  color: var(--ink-faint);
+  margin-bottom: 0.25rem;
+}
+
+.ticket-id {
+  font-family: 'Courier Prime', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--bg-3);
+  line-height: 1;
+  transition: color 0.35s;
+  user-select: none;
+}
+
+// 印章
+.ticket-stamp {
+  font-family: 'Zen Old Mincho', 'Noto Serif TC', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.26em;
+  color: color-mix(in srgb, var(--accent) var(--accent-show), var(--ink-faint));
+  border: 1.5px solid color-mix(in srgb, var(--accent) var(--accent-show), var(--rule-thick));
+  padding: 3px 7px;
+  border-radius: 2px;
+  transform: rotate(7deg);
+  white-space: nowrap;
+  transition: color 0.4s, border-color 0.4s;
+  user-select: none;
+}
+
+// 虛線撕切線
+.ticket-tear {
+  display: flex;
+  align-items: center;
+  padding: 0 1.4rem;
+  background: var(--bg);
+  position: relative;
+  transition: background 0.35s;
+
+  &::before,
+  &::after {
+    content: '';
+    width: 9px;
+    height: 9px;
+    background: var(--bg);
+    border: 1px solid var(--rule-thick);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: background 0.35s;
+  }
+
+  &::before { left: -5px; }
+  &::after  { right: -5px; }
+}
+
+.tear-line {
+  flex: 1;
+  border: none;
+  border-top: 1px dashed var(--rule-thick);
+}
+
+.ticket-bottom {
+  padding: 1.4rem 1.4rem 1.6rem;
+}
+
+// ── 文章標題 ──
+.article-title {
+  font-family: 'Zen Old Mincho', 'Noto Serif TC', serif;
+  font-weight: var(--fw-heading);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: 0.18em;
+  line-height: var(--lh-head);
+  color: var(--ink);
+  margin-bottom: 1.3rem;
+}
+
+// ── meta 資訊 ──
+.article-meta {
+  display: flex;
+  gap: 1.8rem;
+  flex-wrap: wrap;
+}
+
+.meta-field-label {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.meta-field-value {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-mid);
+  display: block;
+}
+
+// ── 正文 ──
+.article-body {
+  font-size: 0.97rem;
+  line-height: var(--lh-body);
+  color: var(--ink);
+
+  p {
+    margin-bottom: 1.6em;
+  }
+
+  // Drop Cap（首字放大）
+  > p:first-of-type::first-letter {
+    font-family: 'Zen Old Mincho', serif;
+    font-weight: 900;
+    font-size: 3.4em;
+    line-height: 0.82;
+    float: left;
+    margin-right: 0.06em;
+    margin-top: 0.08em;
+    color: color-mix(in srgb, var(--accent) var(--accent-show), var(--ink));
+    transition: color 0.4s;
+  }
+
+  // h2
+  h2 {
+    font-family: 'Zen Old Mincho', 'Noto Serif TC', serif;
+    font-weight: var(--fw-heading);
+    font-size: 1.08rem;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+    margin: 2.8em 0 1em;
+    padding: 0.55em 0 0.55em 1em;
+    border-left: 2px solid color-mix(in srgb, var(--accent) var(--accent-show), var(--rule-thick));
+    background: var(--bg-2);
+    transition: background 0.35s, border-color 0.4s;
+  }
+
+  // h3
+  h3 {
+    font-family: 'Zen Old Mincho', 'Noto Serif TC', serif;
+    font-weight: var(--fw-heading);
+    font-size: 0.97rem;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+    margin: 2em 0 0.8em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  // Blockquote
+  blockquote {
+    margin: 2em 0;
+    padding: 1.2em 1.4em;
+    border: 1px dashed var(--rule-thick);
+    background: var(--bg-2);
+    position: relative;
+    transition: background 0.35s;
+
+    &::before {
+      content: '\201C';
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 3.5rem;
+      line-height: 1;
+      color: var(--bg-3);
+      position: absolute;
+      top: -0.15em;
+      left: 0.6rem;
+      transition: color 0.35s;
+      pointer-events: none;
+    }
+
+    p {
+      font-style: italic;
+      color: var(--ink-mid);
+      font-size: 0.9rem;
+      padding-left: 0.8rem;
+      margin-bottom: 0;
+    }
+  }
+
+  // Inline code
+  code {
+    font-family: 'Courier Prime', 'Courier New', monospace;
+    font-size: 0.84em;
+    background: var(--bg-3);
+    padding: 1px 5px;
+    border-radius: 2px;
+    transition: background 0.35s;
+  }
+
+  // Code block
+  pre {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 1.2em 1.4em;
+    overflow-x: auto;
+    margin-bottom: 1.6em;
+    transition: background 0.35s;
+
+    code {
+      background: none;
+      padding: 0;
+      font-size: 0.85rem;
+    }
+  }
+
+  // 表格
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.6em;
+    font-size: 0.88rem;
+
+    th {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: var(--fw-ui);
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      color: var(--ink-mid);
+      border-bottom: 1px solid var(--rule-thick);
+      padding: 0.5em 0.8em;
+      text-align: left;
+    }
+
+    td {
+      padding: 0.5em 0.8em;
+      border-bottom: 1px solid var(--rule);
+      color: var(--ink-mid);
+    }
+
+    tr:last-child td { border-bottom: none; }
+  }
+}
+
+// ── 分頁導航（上一篇/下一篇）──
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule-thick);
+}
+
+.post-nav-item {
+  flex: 1;
+
+  .post-nav-dir {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .post-nav-title {
+    font-family: 'Zen Old Mincho', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-mid);
+    display: block;
+    transition: color 0.15s;
+
+    &:hover { color: var(--ink); }
+  }
+
+  &.next { text-align: right; }
+}
+
+// ── RWD ──
+@media (max-width: 640px) {
+  .article-page { padding: 2.5rem 1.5rem 4rem; }
+  .article-title { font-size: 1.4rem; }
+  .article-meta { gap: 1rem; }
+  .post-nav { flex-direction: column; }
+  .post-nav-item.next { text-align: left; }
+}

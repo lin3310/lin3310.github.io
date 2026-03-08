@@ -1,0 +1,44 @@
+<a href="#main-content" class="skip-link">跳至主要內容</a>
+
+<header class="site-header" role="banner">
+  <div class="header-inner">
+
+    <a href="{{ site.baseurl }}/" class="logo-ticket" aria-label="{{ site.name }} 首頁">
+      <span class="logo-num" aria-hidden="true">{{ site.ticket_num | default: "5492" }}</span>
+      <span class="logo-name">
+        <span class="logo-name-zh">{{ site.name }}</span>
+        <span class="logo-name-en">{{ site.description }}</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="主導航">
+      <a href="{{ site.baseurl }}/"
+         {% if page.url == "/" %}aria-current="page" class="active"{% endif %}>
+        文　章
+      </a>
+      <a href="{{ site.baseurl }}/tags"
+         {% if page.url contains "/tags" %}aria-current="page" class="active"{% endif %}>
+        標　籤
+      </a>
+      <a href="{{ site.baseurl }}/about"
+         {% if page.url contains "/about" %}aria-current="page" class="active"{% endif %}>
+        關　於
+      </a>
+    </nav>
+
+    <div class="header-stamp-date" aria-hidden="true" id="header-date"></div>
+
+  </div>
+</header>
+
+<script>
+// 動態日期
+(function() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const el = document.getElementById('header-date');
+  if (el) el.textContent = y + '.' + m + '.' + dd;
+})();
+</script>

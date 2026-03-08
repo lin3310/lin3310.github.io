@@ -1,0 +1,336 @@
+<!-- 主題控制面板 + JS —— 設定自動存入 localStorage -->
+
+<!-- 收合鈕 -->
+<button class="ctrl-toggle-btn"
+        id="ctrl-toggle"
+        aria-label="主題設定"
+        aria-expanded="false"
+        aria-controls="ctrl-panel"
+        title="主題設定">
+  &#9776;
+</button>
+
+<!-- 控制面板 -->
+<div class="ctrl-panel" id="ctrl-panel" hidden role="region" aria-label="主題控制面板">
+
+  <!-- 點綴溫度 -->
+  <div class="ctrl-section">
+    <div class="ctrl-title">
+      <span>點綴溫度</span>
+      <span class="ctrl-title-val" id="val-warmth">冷</span>
+    </div>
+    <div class="ctrl-range-labels"><span>冷銀</span><span>暖朱</span></div>
+    <input type="range" class="ctrl-range range-warmth"
+           id="range-warmth" min="0" max="100" value="0"
+           aria-label="點綴溫度 (0=冷 100=暖)">
+  </div>
+
+  <div class="ctrl-divider"></div>
+
+  <!-- 看得清楚 -->
+  <div class="ctrl-section">
+    <div class="ctrl-title">
+      <span>看得清楚</span>
+      <span class="ctrl-title-val" id="val-clarity">中</span>
+    </div>
+    <div class="ctrl-range-labels"><span>輕</span><span>粗</span></div>
+    <input type="range" class="ctrl-range range-clarity"
+           id="range-clarity" min="0" max="100" value="50"
+           aria-label="字重清晰度 (0=輕 100=粗)">
+  </div>
+
+  <div class="ctrl-divider"></div>
+
+  <!-- 底色 -->
+  <div class="ctrl-section">
+    <div class="ctrl-title"><span>底　色</span></div>
+    <div class="bg-presets" role="radiogroup" aria-label="底色選擇">
+      <button class="bg-btn on" style="background:#eceae7" title="銀底"
+              data-idx="0" aria-label="銀底" role="radio" aria-checked="true"></button>
+      <button class="bg-btn"    style="background:#f2f1ef" title="霧白"
+              data-idx="1" aria-label="霧白" role="radio" aria-checked="false"></button>
+      <button class="bg-btn"    style="background:#f5f4f2" title="票白"
+              data-idx="2" aria-label="票白" role="radio" aria-checked="false"></button>
+      <button class="bg-btn"    style="background:#faf8f3" title="紙白"
+              data-idx="3" aria-label="紙白" role="radio" aria-checked="false"></button>
+      <button class="bg-btn"    style="background:#fdf8ee" title="米白"
+              data-idx="4" aria-label="米白" role="radio" aria-checked="false"></button>
+    </div>
+  </div>
+
+  <div class="ctrl-divider"></div>
+
+  <!-- 分類碼 -->
+  <div class="ctrl-section">
+    <div class="ctrl-title"><span>分類碼</span></div>
+    <div class="code-btns" role="radiogroup" aria-label="分類碼模式">
+      <button class="code-btn on" data-mode="latin"   role="radio" aria-checked="true">拉丁</button>
+      <button class="code-btn"    data-mode="tiangan" role="radio" aria-checked="false">天干</button>
+      <button class="code-btn"    data-mode="roman"   role="radio" aria-checked="false">羅馬</button>
+    </div>
+  </div>
+
+  <div class="ctrl-divider"></div>
+
+  <!-- 無障礙 -->
+  <div class="ctrl-section">
+    <div class="ctrl-title"><span>無障礙</span></div>
+    <div class="a11y-toggle"
+         id="a11y-toggle"
+         role="switch"
+         aria-checked="false"
+         tabindex="0"
+         aria-label="增強對比與行距">
+      <div class="toggle-track" id="a11y-track">
+        <div class="toggle-thumb"></div>
+      </div>
+      <span class="toggle-label">增強對比 + 行距</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── localStorage keys ──
+  const KEYS = {
+    warmth:   'xirui-warmth',
+    clarity:  'xirui-clarity',
+    bgPreset: 'xirui-bg-preset',
+    codeMode: 'xirui-code-mode',
+    a11y:     'xirui-a11y',
+    panelOpen:'xirui-panel-open',
+  };
+
+  // ── bg presets ──
+  const BG_PRESETS = [
+    { bg:'#eceae7', b2:'#e3e1de', b3:'#d8d6d2', b4:'#ceccC8' },
+    { bg:'#f2f1ef', b2:'#eae9e6', b3:'#deddda', b4:'#d2d1ce' },
+    { bg:'#f5f4f2', b2:'#ededeb', b3:'#e4e3e1', b4:'#d8d7d5' },
+    { bg:'#faf8f3', b2:'#f2efe8', b3:'#e8e4da', b4:'#ddd8cd' },
+    { bg:'#fdf8ee', b2:'#f5f0e2', b3:'#ebe4d2', b4:'#ddd6c0' },
+  ];
+
+  // ── code sets ──
+  const CODE_SETS = {
+    latin: function() {
+      const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+      return a[r(a.length)] + a[r(a.length)];
+    },
+    tiangan: function() {
+      const t = '甲乙丙丁戊己庚辛壬癸';
+      const n = '一二三四五六七八九十';
+      return t[r(10)] + n[r(10)];
+    },
+    roman: function() {
+      const rn = ['Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ','Ⅹ'];
+      const a  = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+      return rn[r(rn.length)] + '-' + a[r(a.length)];
+    }
+  };
+
+  function r(n) { return Math.floor(Math.random() * n); }
+
+  const root = document.documentElement;
+  const body = document.body;
+
+  // ──────────────────────────────
+  // 溫度
+  // ──────────────────────────────
+  const WARMTH_LABELS = ['冷','微冷','微冷','微暖','微暖','微暖','暖','暖','熱','熱','熱'];
+
+  function applyWarmth(v) {
+    root.style.setProperty('--warmth', v / 100);
+    document.getElementById('val-warmth').textContent = WARMTH_LABELS[Math.round(v / 10)];
+    localStorage.setItem(KEYS.warmth, v);
+  }
+
+  document.getElementById('range-warmth').addEventListener('input', function() {
+    applyWarmth(+this.value);
+  });
+
+  // ──────────────────────────────
+  // 清晰度
+  // ──────────────────────────────
+  const CLARITY_LABELS = ['極輕','輕','輕','中','中','中','明','明','清晰','清晰','極粗'];
+
+  function applyClarity(v) {
+    const t = v / 100;
+    let hw, bw, uw;
+
+    if (t < 0.33) {
+      hw = 400 + Math.round(t * 3 * 100);
+      bw = 300; uw = 300;
+    } else if (t < 0.66) {
+      hw = 500 + Math.round((t - 0.33) * 3 * 200);
+      bw = 300 + Math.round((t - 0.33) * 3 * 100);
+      uw = 300;
+    } else {
+      hw = 700 + Math.round((t - 0.66) * 3 * 200);
+      bw = 400 + Math.round((t - 0.66) * 3 * 100);
+      uw = 400;
+    }
+
+    hw = Math.min(Math.round(hw / 100) * 100, 900);
+    bw = Math.min(Math.round(bw / 100) * 100, 500);
+
+    root.style.setProperty('--fw-heading', hw);
+    root.style.setProperty('--fw-body',    bw);
+    root.style.setProperty('--fw-ui',      uw);
+
+    if (!body.classList.contains('a11y')) {
+      const l = Math.round(168 - t * 88);
+      root.style.setProperty('--ink-faint', `rgb(${l} ${l} ${l + 6})`);
+    }
+
+    document.getElementById('val-clarity').textContent = CLARITY_LABELS[Math.round(v / 10)];
+    localStorage.setItem(KEYS.clarity, v);
+  }
+
+  document.getElementById('range-clarity').addEventListener('input', function() {
+    applyClarity(+this.value);
+  });
+
+  // ──────────────────────────────
+  // 底色
+  // ──────────────────────────────
+  function applyBg(idx) {
+    const p = BG_PRESETS[idx];
+    root.style.setProperty('--bg',   p.bg);
+    root.style.setProperty('--bg-2', p.b2);
+    root.style.setProperty('--bg-3', p.b3);
+    root.style.setProperty('--bg-4', p.b4);
+
+    document.querySelectorAll('.bg-btn').forEach(function(btn) {
+      const active = +btn.dataset.idx === idx;
+      btn.classList.toggle('on', active);
+      btn.setAttribute('aria-checked', active);
+    });
+
+    localStorage.setItem(KEYS.bgPreset, idx);
+  }
+
+  document.querySelectorAll('.bg-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { applyBg(+this.dataset.idx); });
+  });
+
+  // ──────────────────────────────
+  // 分類碼
+  // ──────────────────────────────
+  let codeMode = 'latin';
+
+  function applyCodeMode(mode) {
+    codeMode = mode;
+    document.querySelectorAll('.code-btn').forEach(function(btn) {
+      const active = btn.dataset.mode === mode;
+      btn.classList.toggle('on', active);
+      btn.setAttribute('aria-checked', active);
+    });
+    randomizeCodes();
+    localStorage.setItem(KEYS.codeMode, mode);
+  }
+
+  function randomizeCodes() {
+    document.querySelectorAll('.post-serial').forEach(function(el) {
+      // 保留前兩行（年份＋月日），替換分類碼
+      const lines = el.innerHTML.split('<br>');
+      if (lines.length >= 2) {
+        el.innerHTML = lines[0] + '<br>' + lines[1] + '<br>—<br>' + CODE_SETS[codeMode]();
+      }
+    });
+  }
+
+  document.querySelectorAll('.code-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { applyCodeMode(this.dataset.mode); });
+  });
+
+  // ──────────────────────────────
+  // 無障礙
+  // ──────────────────────────────
+  let a11yOn = false;
+
+  function applyA11y(on) {
+    a11yOn = on;
+    body.classList.toggle('a11y', on);
+    const track  = document.getElementById('a11y-track');
+    const toggle = document.getElementById('a11y-toggle');
+    if (track)  track.classList.toggle('on', on);
+    if (toggle) toggle.setAttribute('aria-checked', on);
+    localStorage.setItem(KEYS.a11y, on ? 'on' : 'off');
+
+    // a11y 模式開啟時，強制 faint 顏色不被 clarity 覆蓋
+    if (on) {
+      root.style.setProperty('--ink-faint', 'rgb(88 88 96)');
+    } else {
+      // 重新套用 clarity 計算值
+      const cv = +document.getElementById('range-clarity').value;
+      const l = Math.round(168 - (cv / 100) * 88);
+      root.style.setProperty('--ink-faint', `rgb(${l} ${l} ${l + 6})`);
+    }
+  }
+
+  const a11yToggle = document.getElementById('a11y-toggle');
+  if (a11yToggle) {
+    a11yToggle.addEventListener('click', function() { applyA11y(!a11yOn); });
+    a11yToggle.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        applyA11y(!a11yOn);
+      }
+    });
+  }
+
+  // ──────────────────────────────
+  // 面板收合
+  // ──────────────────────────────
+  const toggleBtn = document.getElementById('ctrl-toggle');
+  const panel     = document.getElementById('ctrl-panel');
+
+  function setPanelOpen(open) {
+    if (open) {
+      panel.removeAttribute('hidden');
+    } else {
+      panel.setAttribute('hidden', '');
+    }
+    toggleBtn.setAttribute('aria-expanded', open);
+    localStorage.setItem(KEYS.panelOpen, open ? '1' : '0');
+  }
+
+  toggleBtn.addEventListener('click', function() {
+    setPanelOpen(panel.hasAttribute('hidden'));
+  });
+
+  // ──────────────────────────────
+  // 從 localStorage 讀取並恢復設定
+  // ──────────────────────────────
+  (function restore() {
+    const warmth  = localStorage.getItem(KEYS.warmth);
+    const clarity = localStorage.getItem(KEYS.clarity);
+    const bgIdx   = localStorage.getItem(KEYS.bgPreset);
+    const mode    = localStorage.getItem(KEYS.codeMode);
+    const a11y    = localStorage.getItem(KEYS.a11y);
+    const panelOp = localStorage.getItem(KEYS.panelOpen);
+
+    const wv = warmth  !== null ? +warmth  : 0;
+    const cv = clarity !== null ? +clarity : 50;
+    const bi = bgIdx   !== null ? +bgIdx   : 0;
+    const cm = mode    || 'latin';
+
+    document.getElementById('range-warmth').value  = wv;
+    document.getElementById('range-clarity').value = cv;
+
+    applyWarmth(wv);
+    applyClarity(cv);
+    applyBg(bi);
+    applyCodeMode(cm);
+    if (a11y === 'on') applyA11y(true);
+    if (panelOp === '1') setPanelOpen(true);
+
+    // 首頁隨機分類碼
+    randomizeCodes();
+  })();
+
+})();
+</script>

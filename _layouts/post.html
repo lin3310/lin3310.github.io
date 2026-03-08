@@ -1,0 +1,151 @@
+---
+layout: default
+---
+
+<div class="article-page">
+
+  <!-- 票根式文章頭部 -->
+  <div class="article-ticket" role="region" aria-label="文章資訊">
+    <div class="ticket-top">
+      <div>
+        <p class="ticket-cat">
+          {% if page.category %}{{ page.category }}{% endif %}
+          {% if page.category and page.category_en %}&nbsp;/&nbsp;{% endif %}
+          {% if page.category_en %}<span style="letter-spacing:0.2em">{{ page.category_en }}</span>{% endif %}
+        </p>
+        <div class="ticket-id" aria-hidden="true">{{ page.ticket_id | default: "----" }}</div>
+      </div>
+      <div class="ticket-stamp" aria-label="狀態">{{ page.stamp | default: "通　讀" }}</div>
+    </div>
+    <div class="ticket-tear"><div class="tear-line"></div></div>
+    <div class="ticket-bottom">
+      <h1 class="article-title">{{ page.title }}</h1>
+      <div class="article-meta" role="list" aria-label="文章資訊">
+        <div role="listitem">
+          <span class="meta-field-label">發　行　日</span>
+          <time class="meta-field-value" datetime="{{ page.date | date: '%Y-%m-%d' }}">
+            {{ page.date | date: "%Y-%m-%d" }}
+          </time>
+        </div>
+        {% if page.reading_time %}
+        <div role="listitem">
+          <span class="meta-field-label">閱　讀　時　間</span>
+          <span class="meta-field-value">約 {{ page.reading_time }} 分鐘</span>
+        </div>
+        {% endif %}
+        <div role="listitem">
+          <span class="meta-field-label">著　者</span>
+          <span class="meta-field-value">{{ page.author | default: site.author }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文章小目錄（需在文章 front matter 設定 toc: true）-->
+  {% if page.toc %}
+  <nav class="article-toc" aria-label="文章目錄" id="toc">
+    <div class="toc-header">
+      <span class="toc-dot" aria-hidden="true"></span>
+      <span class="toc-label">目　錄</span>
+    </div>
+    <div class="toc-body" id="toc-content">
+      <!-- TOC 由 Jekyll TOC plugin 或 JS 自動生成 -->
+      <!-- 若無 plugin，可在文章中手動寫 include toc -->
+    </div>
+  </nav>
+  {% endif %}
+
+  <!-- 正文 -->
+  <article class="article-body" id="article-content">
+    {{ content }}
+  </article>
+
+  <!-- 上一篇 / 下一篇 -->
+  {% if page.previous or page.next %}
+  <nav class="post-nav" aria-label="文章導航">
+    {% if page.previous %}
+    <div class="post-nav-item prev">
+      <span class="post-nav-dir">&#8592; 上一篇</span>
+      <a href="{{ page.previous.url | relative_url }}" class="post-nav-title">
+        {{ page.previous.title }}
+      </a>
+    </div>
+    {% else %}
+    <div class="post-nav-item prev"></div>
+    {% endif %}
+
+    {% if page.next %}
+    <div class="post-nav-item next">
+      <span class="post-nav-dir">下一篇 &#8594;</span>
+      <a href="{{ page.next.url | relative_url }}" class="post-nav-title">
+        {{ page.next.title }}
+      </a>
+    </div>
+    {% endif %}
+  </nav>
+  {% endif %}
+
+</div>
+
+<!-- 文章頁：自動生成 TOC -->
+{% if page.toc %}
+<script>
+(function() {
+  const body    = document.getElementById('article-content');
+  const tocEl   = document.getElementById('toc-content');
+  if (!body || !tocEl) return;
+
+  const headings = body.querySelectorAll('h2, h3');
+  if (headings.length === 0) { document.getElementById('toc').remove(); return; }
+
+  const ul = document.createElement('ul');
+  ul.className = 'toc-list';
+
+  let h2Item = null;
+  let subUl  = null;
+  let h2Idx  = 0;
+
+  const nums = ['一','二','三','四','五','六','七','八','九','十'];
+
+  headings.forEach(function(h) {
+    // 加錨點
+    if (!h.id) {
+      h.id = 'h-' + h.textContent.trim().replace(/\s+/g, '-').replace(/[^\w\u4e00-\u9fa5-]/g, '');
+    }
+
+    if (h.tagName === 'H2') {
+      h2Idx++;
+      h2Item = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+
+      const numSpan = document.createElement('span');
+      numSpan.className = 'toc-num';
+      numSpan.setAttribute('aria-hidden', 'true');
+      numSpan.textContent = (nums[h2Idx - 1] || h2Idx) + '、';
+
+      a.appendChild(numSpan);
+      a.appendChild(document.createTextNode(h.textContent));
+      h2Item.appendChild(a);
+      ul.appendChild(h2Item);
+      subUl = null;
+
+    } else if (h.tagName === 'H3' && h2Item) {
+      if (!subUl) {
+        subUl = document.createElement('ul');
+        subUl.className = 'toc-sub';
+        h2Item.appendChild(subUl);
+      }
+      const li = document.createElement('li');
+      const a  = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      subUl.appendChild(li);
+    }
+  });
+
+  tocEl.appendChild(ul);
+})();
+</script>
+{% endif %}

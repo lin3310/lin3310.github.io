@@ -1,0 +1,62 @@
+# ═══════════════════════════════════════
+#  — Jekyll 設定檔
+# ═══════════════════════════════════════
+
+# ── 基本資訊 ──
+name:        林的怪東西集中地
+description: Notes on Language & Culture
+baseurl:     ""
+url:         "https://lin3310.github.io"
+
+# ── 票根 Logo 左側序號 ──
+ticket_num: "4514"
+
+# ── 作者 ──
+author: lin3310
+
+# ── 關於（側欄摘要）──
+about: "方格子同名沙龍-林的怪東西集中地 本人的自架網頁板"
+
+# ── 社群 ──
+github_username: lin3310
+
+# ── Jekyll 設定 ──
+markdown:    kramdown
+highlighter: rouge
+permalink:   /:year/:month/:day/:title/
+paginate:    10
+paginate_path: "/page:num/"
+
+# ── 時區 ──
+timezone: Asia/Taipei
+
+# ── Kramdown ──
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+
+# ── Sass ──
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# ── 排除檔案 ──
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - "*.sh"
+  - node_modules
+
+# ── Plugins ──
+plugins:
+  - jekyll-paginate
+  - jekyll-feed
+  - jekyll-seo-tag

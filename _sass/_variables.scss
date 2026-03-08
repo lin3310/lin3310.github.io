@@ -1,0 +1,45 @@
+// ═══════════════════════════════════════════
+// 曦瑞筆記 設計系統 — CSS 變數
+// 所有動態值由 theme-controls.js 透過
+// document.documentElement.style.setProperty() 覆寫
+// ═══════════════════════════════════════════
+
+:root {
+  // ── 動態控制變數（JS 控制）──
+  --warmth:   0;        // 0→1 點綴溫度（冷→暖）
+  --clarity:  0.5;      // 0→1 看得清楚（輕→粗）
+
+  // ── 底色 preset 預設：銀底 ──
+  // 由 JS setBg() 切換，對應 5 組 preset
+  --bg:   #eceae7;      // 主層背景
+  --bg-2: #e3e1de;      // 次層：票頭、側欄、code bg
+  --bg-3: #d8d6d2;      // 深層：hover、blockquote 引號色
+  --bg-4: #ceccC8;      // 最深層：footer border
+
+  // ── 墨色 ──
+  --ink:       #1a1a1e;
+  --ink-mid:   #484850;
+  --ink-faint: rgb(142 142 150);   // clarity 滑桿調整
+
+  // ── 點綴色（印章朱紅）──
+  --accent:      #9b3a22;
+  --accent-show: calc(var(--warmth) * 100%);
+  // 使用：color-mix(in srgb, var(--accent) var(--accent-show), var(--ink-faint))
+
+  // ── 字重（clarity 滑桿控制）──
+  --fw-heading: 500;
+  --fw-body:    400;
+  --fw-ui:      300;
+
+  // ── 行距 ──
+  --lh-body: 2.0;
+  --lh-head: 1.5;
+
+  // ── 規則線 ──
+  --rule:       rgba(26, 26, 26, 0.13);
+  --rule-thick: rgba(26, 26, 26, 0.24);
+
+  // ── 版面寬度 ──
+  --max-w:     960px;
+  --article-w: 700px;
+}
