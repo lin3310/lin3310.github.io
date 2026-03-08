@@ -1,0 +1,184 @@
+---
+layout: default
+title: 標籤
+permalink: /tags/
+---
+
+<div class="tags-page">
+
+  <div class="section-head">
+    <span class="section-head-label">標　籤　索　引</span>
+    <span class="section-head-num">{{ site.tags.size }} 個標籤</span>
+  </div>
+
+  <!-- 標籤雲 -->
+  <div class="tag-cloud" aria-label="所有標籤">
+    {% assign sorted_tags = site.tags | sort %}
+    {% for tag in sorted_tags %}
+    <a href="#{{ tag[0] | slugify }}" class="tag-cloud-item">
+      {{ tag[0] }}<span class="tag-cloud-count">{{ tag[1].size }}</span>
+    </a>
+    {% endfor %}
+  </div>
+
+  <!-- 各標籤文章列表 -->
+  <div class="tag-sections">
+    {% for tag in sorted_tags %}
+    <section class="tag-section" id="{{ tag[0] | slugify }}" aria-labelledby="tag-{{ tag[0] | slugify }}">
+
+      <div class="tag-section-head">
+        <h2 class="tag-section-title" id="tag-{{ tag[0] | slugify }}">
+          {{ tag[0] }}
+        </h2>
+        <span class="tag-section-count">{{ tag[1].size }} 篇</span>
+      </div>
+
+      <ul class="tag-post-list" aria-label="{{ tag[0] }} 的文章">
+        {% assign posts_by_tag = tag[1] | sort: 'date' | reverse %}
+        {% for post in posts_by_tag %}
+        <li class="tag-post-item">
+          <time class="tag-post-date" datetime="{{ post.date | date: '%Y-%m-%d' }}">
+            {{ post.date | date: "%Y.%m.%d" }}
+          </time>
+          <a href="{{ post.url | relative_url }}" class="tag-post-title">
+            {{ post.title }}
+          </a>
+          {% if post.category %}
+          <span class="tag-post-cat">{{ post.category }}</span>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+
+    </section>
+    {% endfor %}
+  </div>
+
+</div>
+
+<style>
+.tags-page {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 3.5rem 2.5rem 5rem;
+}
+
+/* 標籤雲 */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 3.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule-thick);
+}
+
+.tag-cloud-item {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-mid);
+  border: 1px solid var(--rule-thick);
+  padding: 3px 10px 4px;
+  border-radius: 1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.tag-cloud-item:hover {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.tag-cloud-count {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.62rem;
+  color: var(--ink-faint);
+  transition: color 0.15s;
+}
+
+.tag-cloud-item:hover .tag-cloud-count {
+  color: var(--bg-3);
+}
+
+/* 各標籤區塊 */
+.tag-section {
+  margin-bottom: 2.8rem;
+}
+
+.tag-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule-thick);
+  margin-bottom: 0.8rem;
+}
+
+.tag-section-title {
+  font-family: 'Zen Old Mincho', 'Noto Serif TC', serif;
+  font-weight: var(--fw-heading);
+  font-size: 0.9rem;
+  letter-spacing: 0.28em;
+  color: var(--ink);
+}
+
+.tag-section-count {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.65rem;
+  color: var(--ink-faint);
+}
+
+/* 文章列表 */
+.tag-post-list {
+  list-style: none;
+}
+
+.tag-post-item {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.38rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.tag-post-date {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tag-post-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.9rem;
+  color: var(--ink-mid);
+  flex: 1;
+  transition: color 0.15s;
+}
+
+.tag-post-title:hover { color: var(--ink); }
+
+.tag-post-cat {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  border: 1px solid var(--rule);
+  padding: 1px 5px 2px;
+  border-radius: 1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* RWD */
+@media (max-width: 640px) {
+  .tags-page { padding: 2.5rem 1.5rem 4rem; }
+  .tag-post-item { flex-wrap: wrap; gap: 0.4rem; }
+  .tag-post-cat { display: none; }
+}
+</style>
